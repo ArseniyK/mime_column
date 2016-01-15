@@ -1,7 +1,6 @@
 import gtk
 import os
-from plugins.file_list.file_list import Column
-from plugins.file_list.plugin import FileList
+from plugins.file_list.plugin import Column, FileList
 from plugin_base.column_extension import ColumnExtension
 
 def register_plugin(application):
@@ -41,7 +40,7 @@ class TypeColumn(ColumnExtension):
 			if mime_type is None:
 				path = os.path.join(self._parent.path, store.get_value(selected_iter, Column.NAME))
 				# get content type
-				if self._parent._current_provider.is_dir(path):
+				if self._parent._provider.is_dir(path):
 					mime_type = 'inode/directory'
 
 				else:
@@ -51,7 +50,7 @@ class TypeColumn(ColumnExtension):
 					try:
 						if self._associations_manager.is_mime_type_unknown(mime_type):
 
-							data = self._associations_manager.get_sample_data(path, self._parent._current_provider)
+							data = self._associations_manager.get_sample_data(path, self._parent._provider)
 							mime_type = self._associations_manager.get_mime_type(data=data)
 					except Exception:
 						pass
